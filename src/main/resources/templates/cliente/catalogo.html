@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Catálogo Dulce de Almíbar</h1>
+
+    <nav>
+        <a href="/cliente/catalogo">Catálogo</a>
+        <a href="/cliente/pedido">Hacer pedido</a>
+        <a href="/cliente/mis-pedidos">Mis pedidos</a>
+        <a href="/cliente/mis-facturas">Mis facturas</a>
+        <a href="/logout">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main class="catalogo">
+
+    <section class="bienvenida">
+        <h2>Productos disponibles</h2>
+        <p>
+            Explora los productos disponibles y luego usa el botón
+            <strong>Hacer pedido</strong> para seleccionar uno o varios productos.
+        </p>
+    </section>
+
+    <section class="productos-grid">
+
+        <div class="producto-card" th:each="prod : ${productos}">
+
+            <div class="producto-img"
+                 th:text="${prod.imagenEmoji != null && prod.imagenEmoji != '' ? prod.imagenEmoji : '🍬'}">
+                🍬
+            </div>
+
+            <h3 th:text="${prod.nombre}">Nombre del producto</h3>
+
+            <p th:text="${prod.descripcion}">
+                Descripción del producto.
+            </p>
+
+            <span>
+                $<span th:text="${#numbers.formatDecimal(prod.precio, 0, 'POINT', 0, 'COMMA')}">0</span>
+            </span>
+
+            <p class="stock-texto">
+                Stock disponible:
+                <strong th:text="${prod.stock}">0</strong>
+            </p>
+
+            <p class="stock-texto">
+                Categoría:
+                <strong th:text="${prod.categoria}">Categoría</strong>
+            </p>
+
+            <a href="/cliente/pedido" class="btn btn-principal">
+                Pedir este producto
+            </a>
+
+        </div>
+
+        <div th:if="${#lists.isEmpty(productos)}" class="producto-card">
+            <div class="producto-img">🍬</div>
+            <h3>No hay productos disponibles</h3>
+            <p>
+                El administrador aún no ha registrado productos activos en el sistema.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

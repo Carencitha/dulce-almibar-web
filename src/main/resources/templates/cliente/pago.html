@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago del Pedido | Dulce Almíbar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>Pago del Pedido</h1>
+
+  <nav>
+    <a href="/cliente/catalogo">Catálogo</a>
+    <a href="/cliente/pedido">Hacer pedido</a>
+    <a href="/cliente/mis-pedidos">Mis pedidos</a>
+    <a href="/cliente/mis-facturas">Mis facturas</a>
+    <a href="/logout">Cerrar sesión</a>
+  </nav>
+</header>
+
+<main class="form-container">
+
+  <div class="form-card">
+
+    <h1>Registrar pago</h1>
+    <p>Selecciona el método de pago para finalizar tu compra.</p>
+
+    <div class="mensaje-error" th:if="${error}">
+      <span th:text="${error}"></span>
+    </div>
+
+    <form action="/cliente/pago/guardar" method="post">
+
+      <input type="hidden" name="pedidoId" th:value="${pedidoId}">
+
+      <label>Método de pago</label>
+      <select name="metodoPago" required>
+        <option value="">Seleccione una opción</option>
+        <option value="EFECTIVO">Efectivo</option>
+        <option value="TRANSFERENCIA">Transferencia bancaria</option>
+        <option value="NEQUI">Nequi</option>
+        <option value="DAVIPLATA">Daviplata</option>
+        <option value="CONTRA_ENTREGA">Contra entrega</option>
+      </select>
+
+      <label>Referencia de pago</label>
+      <input type="text"
+             name="referenciaPago"
+             placeholder="Ej: número de transacción o comprobante">
+
+      <button type="submit" class="btn btn-principal">
+        Confirmar pago y generar factura
+      </button>
+
+    </form>
+
+    <p class="texto-centro">
+      <a href="/cliente/mis-pedidos">Volver a mis pedidos</a>
+    </p>
+
+  </div>
+
+</main>
+
+</body>
+</html>

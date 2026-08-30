@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar sesión | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <h1>Iniciar sesión</h1>
+        <p>Ingresa tus datos para acceder al sistema.</p>
+
+        <div class="mensaje-error" th:if="${error}">
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="mensaje-exito" th:if="${exito}">
+            <span th:text="${exito}"></span>
+        </div>
+
+        <form action="/login" method="post">
+
+            <label>Correo electrónico</label>
+            <input type="email"
+                   name="correo"
+                   placeholder="Ej: admin@dulce.com"
+                   required>
+
+            <label>Contraseña</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Ingresa tu contraseña"
+                   required>
+
+            <button type="submit" class="btn btn-principal">
+                Ingresar
+            </button>
+
+        </form>
+
+        <p class="texto-centro">
+            ¿No tienes cuenta?
+            <a href="/registro">Regístrate aquí</a>
+        </p>
+
+        <p class="texto-centro">
+            <a href="/">Volver al inicio</a>
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

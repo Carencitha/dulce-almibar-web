@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Pedidos | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Gestión de Pedidos</h1>
+
+    <nav>
+        <a href="/admin/dashboard">Inicio</a>
+        <a href="/admin/productos">Productos</a>
+        <a href="/admin/insumos">Insumos</a>
+        <a href="/admin/proveedores">Proveedores</a>
+        <a href="/admin/pedidos">Pedidos</a>
+        <a href="#">Facturas</a>
+        <a href="/logout">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <section class="bienvenida">
+        <h2>Pedidos de los clientes</h2>
+        <p>
+            Desde aquí puedes consultar los pedidos realizados por los clientes,
+            revisar sus productos y actualizar el estado del pedido.
+        </p>
+    </section>
+
+    <section class="table-panel">
+
+        <h2>Lista de pedidos</h2>
+
+        <div class="tabla-contenedor">
+            <table class="tabla">
+                <thead>
+                <tr>
+                    <th># Pedido</th>
+                    <th>Cliente</th>
+                    <th>Contacto</th>
+                    <th>Fecha</th>
+                    <th>Productos</th>
+                    <th>Observaciones</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Cambiar estado</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="pedido : ${pedidos}">
+                    <td>
+                        <strong>#<span th:text="${pedido.id}">1</span></strong>
+                    </td>
+
+                    <td>
+                        <strong th:text="${pedido.nombreCliente}">Cliente</strong>
+                        <br>
+                        <small th:text="${pedido.correoCliente}">correo@email.com</small>
+                    </td>
+
+                    <td>
+                        <small>
+                            Tel:
+                            <span th:text="${pedido.telefonoCliente != null ? pedido.telefonoCliente : 'No registrado'}">
+                                No registrado
+                            </span>
+                        </small>
+                        <br>
+                        <small>
+                            Dir:
+                            <span th:text="${pedido.direccionCliente != null ? pedido.direccionCliente : 'No registrada'}">
+                                No registrada
+                            </span>
+                        </small>
+                    </td>
+
+                    <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">
+                        01/01/2026
+                    </td>
+
+                    <td>
+                        <div th:each="detalle : ${pedido.detalles}" class="detalle-pedido">
+                            <strong th:text="${detalle.nombreProducto}">Producto</strong>
+                            <br>
+                            <small>
+                                Cantidad:
+                                <span th:text="${detalle.cantidad}">1</span>
+                                |
+                                Precio:
+                                $<span th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                |
+                                Subtotal:
+                                $<span th:text="${#numbers.formatDecimal(detalle.subtotal, 0, 'POINT', 0, 'COMMA')}">0</span>
+                            </small>
+                        </div>
+                    </td>
+
+                    <td th:text="${pedido.observaciones != null && pedido.observaciones != '' ? pedido.observaciones : 'Sin observaciones'}">
+                        Sin observaciones
+                    </td>
+
+                    <td>
+                        <strong>
+                            $<span th:text="${#numbers.formatDecimal(pedido.total, 0, 'POINT', 0, 'COMMA')}">0</span>
+                        </strong>
+                    </td>
+
+                    <td>
+                        <span th:if="${pedido.estado == 'PENDIENTE'}" class="estado-pendiente">Pendiente</span>
+                        <span th:if="${pedido.estado == 'CONFIRMADO'}" class="estado-activo">Confirmado</span>
+                        <span th:if="${pedido.estado == 'ENTREGADO'}" class="estado-activo">Entregado</span>
+                        <span th:if="${pedido.estado == 'CANCELADO'}" class="estado-inactivo">Cancelado</span>
+                    </td>
+
+                    <td class="acciones">
+                        <a th:href="@{/admin/pedidos/estado/{id}(id=${pedido.id}, estado='CONFIRMADO')}"
+                           class="btn-tabla editar">
+                            Confirmar
+                        </a>
+
+                        <a th:href="@{/admin/pedidos/estado/{id}(id=${pedido.id}, estado='ENTREGADO')}"
+                           class="btn-tabla editar">
+                            Entregado
+                        </a>
+
+                        <a th:href="@{/admin/pedidos/estado/{id}(id=${pedido.id}, estado='CANCELADO')}"
+                           class="btn-tabla eliminar">
+                            Cancelar
+                        </a>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(pedidos)}">
+                    <td colspan="9" class="sin-datos">
+                        No hay pedidos registrados todavía.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

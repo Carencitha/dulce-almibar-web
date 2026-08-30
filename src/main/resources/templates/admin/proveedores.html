@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Proveedores | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Gestión de Proveedores</h1>
+
+    <nav>
+        <a href="/admin/dashboard">Inicio</a>
+        <a href="/admin/productos">Productos</a>
+        <a href="/admin/insumos">Insumos</a>
+        <a href="/admin/proveedores">Proveedores</a>
+        <a href="#">Pedidos</a>
+        <a href="#">Facturas</a>
+        <a href="/logout">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <section class="bienvenida">
+        <h2>Proveedores del negocio</h2>
+        <p>
+            Desde aquí puedes registrar, consultar, editar y desactivar los proveedores
+            que suministran materias primas para la producción de Dulce Almíbar.
+        </p>
+    </section>
+
+    <section class="admin-layout">
+
+        <div class="form-panel">
+            <h2 th:text="${proveedor.id == null ? 'Registrar proveedor' : 'Editar proveedor'}">
+                Registrar proveedor
+            </h2>
+
+            <form action="/admin/proveedores/guardar" method="post" th:object="${proveedor}">
+
+                <input type="hidden" th:field="*{id}">
+
+                <label>Nombre del proveedor</label>
+                <input type="text"
+                       th:field="*{nombre}"
+                       placeholder="Ej: Finca El Paraíso"
+                       required>
+
+                <label>Persona de contacto</label>
+                <input type="text"
+                       th:field="*{contacto}"
+                       placeholder="Ej: Hernando López">
+
+                <label>Teléfono</label>
+                <input type="text"
+                       th:field="*{telefono}"
+                       placeholder="Ej: 3151112222">
+
+                <label>Correo electrónico</label>
+                <input type="email"
+                       th:field="*{correo}"
+                       placeholder="Ej: proveedor@email.com">
+
+                <label>Dirección</label>
+                <input type="text"
+                       th:field="*{direccion}"
+                       placeholder="Ej: Vélez Santander">
+
+                <label>Tipo de insumo que suministra</label>
+                <input type="text"
+                       th:field="*{tipoInsumo}"
+                       placeholder="Ej: Guayaba fresca, azúcar, envases">
+
+                <input type="hidden" th:field="*{activo}">
+
+                <button type="submit" class="btn btn-principal">
+                    Guardar proveedor
+                </button>
+
+                <a href="/admin/proveedores" class="btn btn-secundario btn-full-link">
+                    Limpiar formulario
+                </a>
+
+            </form>
+        </div>
+
+        <div class="table-panel">
+            <h2>Lista de proveedores</h2>
+
+            <div class="tabla-contenedor">
+                <table class="tabla">
+                    <thead>
+                    <tr>
+                        <th>Proveedor</th>
+                        <th>Contacto</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Dirección</th>
+                        <th>Insumo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="prov : ${proveedores}">
+                        <td>
+                            <strong th:text="${prov.nombre}">Proveedor</strong>
+                        </td>
+
+                        <td th:text="${prov.contacto}">Contacto</td>
+
+                        <td th:text="${prov.telefono}">Teléfono</td>
+
+                        <td th:text="${prov.correo}">Correo</td>
+
+                        <td th:text="${prov.direccion}">Dirección</td>
+
+                        <td th:text="${prov.tipoInsumo}">Tipo insumo</td>
+
+                        <td>
+                            <span th:if="${prov.activo}" class="estado-activo">Activo</span>
+                            <span th:unless="${prov.activo}" class="estado-inactivo">Inactivo</span>
+                        </td>
+
+                        <td class="acciones">
+                            <a th:href="@{/admin/proveedores/editar/{id}(id=${prov.id})}"
+                               class="btn-tabla editar">
+                                Editar
+                            </a>
+
+                            <a th:href="@{/admin/proveedores/eliminar/{id}(id=${prov.id})}"
+                               class="btn-tabla eliminar"
+                               onclick="return confirm('¿Seguro que deseas desactivar este proveedor?')">
+                                Desactivar
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(proveedores)}">
+                        <td colspan="8" class="sin-datos">
+                            No hay proveedores registrados todavía.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

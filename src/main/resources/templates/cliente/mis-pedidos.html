@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Pedidos | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Mis Pedidos</h1>
+
+    <nav>
+        <a href="/cliente/catalogo">Catálogo</a>
+        <a href="/cliente/pedido">Hacer pedido</a>
+        <a href="/cliente/mis-pedidos">Mis pedidos</a>
+        <a href="/cliente/mis-facturas">Mis facturas</a>
+        <a href="/logout">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <section class="bienvenida">
+        <h2>Historial de pedidos</h2>
+        <p>
+            Aquí puedes consultar los pedidos que has realizado, sus productos,
+            cantidades, total y estado actual.
+        </p>
+    </section>
+
+    <section class="table-panel">
+
+        <h2>Mis pedidos registrados</h2>
+
+        <div class="tabla-contenedor">
+            <table class="tabla">
+                <thead>
+                <tr>
+                    <th># Pedido</th>
+                    <th>Fecha</th>
+                    <th>Productos</th>
+                    <th>Observaciones</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Pago</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="pedido : ${pedidos}">
+                    <td>
+                        <strong>#<span th:text="${pedido.id}">1</span></strong>
+                    </td>
+
+                    <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">
+                        01/01/2026
+                    </td>
+
+                    <td>
+                        <div th:each="detalle : ${pedido.detalles}" class="detalle-pedido">
+                            <strong th:text="${detalle.nombreProducto}">Producto</strong>
+                            <br>
+                            <small>
+                                Cantidad:
+                                <span th:text="${detalle.cantidad}">1</span>
+                                |
+                                Precio:
+                                $<span th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                |
+                                Subtotal:
+                                $<span th:text="${#numbers.formatDecimal(detalle.subtotal, 0, 'POINT', 0, 'COMMA')}">0</span>
+                            </small>
+                        </div>
+                    </td>
+
+                    <td th:text="${pedido.observaciones != null && pedido.observaciones != '' ? pedido.observaciones : 'Sin observaciones'}">
+                        Sin observaciones
+                    </td>
+
+                    <td>
+                        <strong>
+                            $<span th:text="${#numbers.formatDecimal(pedido.total, 0, 'POINT', 0, 'COMMA')}">0</span>
+                        </strong>
+                    </td>
+
+                    <td>
+                        <span th:if="${pedido.estado == 'PENDIENTE'}" class="estado-pendiente">Pendiente</span>
+                        <span th:if="${pedido.estado == 'CONFIRMADO'}" class="estado-activo">Confirmado</span>
+                        <span th:if="${pedido.estado == 'ENTREGADO'}" class="estado-activo">Entregado</span>
+                        <span th:if="${pedido.estado == 'CANCELADO'}" class="estado-inactivo">Cancelado</span>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/cliente/pago/{id}(id=${pedido.id})}" class="btn-tabla editar">
+                            Pagar / Facturar
+                        </a>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(pedidos)}">
+                    <td colspan="7" class="sin-datos">
+                        Aún no tienes pedidos registrados.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

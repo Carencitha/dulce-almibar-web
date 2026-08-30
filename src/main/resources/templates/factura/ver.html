@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Factura | Dulce Almíbar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>Factura Dulce Almíbar</h1>
+
+  <nav>
+    <a href="/cliente/catalogo">Catálogo</a>
+    <a href="/cliente/mis-pedidos">Mis pedidos</a>
+    <a href="/cliente/mis-facturas">Mis facturas</a>
+    <a href="/admin/facturas">Facturas admin</a>
+    <a href="/logout">Cerrar sesión</a>
+  </nav>
+</header>
+
+<main class="dashboard">
+
+  <section class="factura-box">
+
+    <div class="factura-encabezado">
+      <div>
+        <h2>Dulce Almíbar</h2>
+        <p>Vélez, Santander</p>
+        <p>NIT: 901.234.567-8</p>
+      </div>
+
+      <div class="factura-numero">
+        <h3 th:text="${factura.numeroFactura}">FAC-000</h3>
+        <p th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy HH:mm')}">
+          01/01/2026
+        </p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="factura-cliente">
+      <h3>Datos del cliente</h3>
+
+      <p>
+        <strong>Nombre:</strong>
+        <span th:text="${factura.nombreCliente}">Cliente</span>
+      </p>
+
+      <p>
+        <strong>Correo:</strong>
+        <span th:text="${factura.correoCliente}">correo@email.com</span>
+      </p>
+
+      <p>
+        <strong>Teléfono:</strong>
+        <span th:text="${factura.telefonoCliente != null ? factura.telefonoCliente : 'No registrado'}">
+                    No registrado
+                </span>
+      </p>
+
+      <p>
+        <strong>Dirección:</strong>
+        <span th:text="${factura.direccionCliente != null ? factura.direccionCliente : 'No registrada'}">
+                    No registrada
+                </span>
+      </p>
+    </div>
+
+    <div class="factura-cliente">
+      <h3>Productos del pedido</h3>
+
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr th:each="detalle : ${factura.pedido.detalles}">
+            <td th:text="${detalle.nombreProducto}">Producto</td>
+            <td th:text="${detalle.cantidad}">1</td>
+            <td>
+              $<span th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'POINT', 0, 'COMMA')}">0</span>
+            </td>
+            <td>
+              $<span th:text="${#numbers.formatDecimal(detalle.subtotal, 0, 'POINT', 0, 'COMMA')}">0</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="factura-totales">
+      <p>
+        <strong>Subtotal:</strong>
+        $<span th:text="${#numbers.formatDecimal(factura.subtotal, 0, 'POINT', 0, 'COMMA')}">0</span>
+      </p>
+
+      <p>
+        <strong>IVA 19%:</strong>
+        $<span th:text="${#numbers.formatDecimal(factura.iva, 0, 'POINT', 0, 'COMMA')}">0</span>
+      </p>
+
+      <p class="factura-total-final">
+        <strong>Total:</strong>
+        $<span th:text="${#numbers.formatDecimal(factura.total, 0, 'POINT', 0, 'COMMA')}">0</span>
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        <span class="estado-activo" th:text="${factura.estadoFactura}">GENERADA</span>
+      </p>
+    </div>
+
+    <div class="factura-botones">
+      <button onclick="window.print()" class="btn btn-principal">
+        Imprimir factura
+      </button>
+
+      <a href="/cliente/mis-facturas" class="btn btn-secundario">
+        Volver
+      </a>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>

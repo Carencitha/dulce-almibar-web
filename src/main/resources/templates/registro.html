@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de cliente | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <h1>Registro de cliente</h1>
+        <p>Crea tu cuenta para realizar pedidos en Dulce Almíbar.</p>
+
+        <div class="mensaje-error" th:if="${error}">
+            <span th:text="${error}"></span>
+        </div>
+
+        <form action="/registro" method="post">
+
+            <label>Nombre completo</label>
+            <input type="text"
+                   name="nombre"
+                   placeholder="Ej: Cliente Prueba"
+                   required>
+
+            <label>Correo electrónico</label>
+            <input type="email"
+                   name="correo"
+                   placeholder="Ej: cliente@dulce.com"
+                   required>
+
+            <label>Contraseña</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Crea una contraseña"
+                   required>
+
+            <label>Teléfono</label>
+            <input type="text"
+                   name="telefono"
+                   placeholder="Ej: 3110000000">
+
+            <label>Dirección</label>
+            <input type="text"
+                   name="direccion"
+                   placeholder="Ej: Vélez Santander">
+
+            <button type="submit" class="btn btn-principal">
+                Registrarme
+            </button>
+
+        </form>
+
+        <p class="texto-centro">
+            ¿Ya tienes cuenta?
+            <a href="/login">Inicia sesión</a>
+        </p>
+
+        <p class="texto-centro">
+            <a href="/">Volver al inicio</a>
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

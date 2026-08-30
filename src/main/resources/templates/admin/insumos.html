@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Insumos | Dulce Almíbar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>Gestión de Insumos</h1>
+
+    <nav>
+        <a href="/admin/dashboard">Inicio</a>
+        <a href="/admin/productos">Productos</a>
+        <a href="/admin/insumos">Insumos</a>
+        <a href="#">Proveedores</a>
+        <a href="#">Pedidos</a>
+        <a href="#">Facturas</a>
+        <a href="/logout">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <section class="bienvenida">
+        <h2>Control de materias primas</h2>
+        <p>
+            Desde aquí puedes registrar, consultar, editar y desactivar los insumos
+            utilizados en la producción de Dulce Almíbar.
+        </p>
+    </section>
+
+    <section class="admin-layout">
+
+        <div class="form-panel">
+            <h2 th:text="${insumo.id == null ? 'Registrar insumo' : 'Editar insumo'}">
+                Registrar insumo
+            </h2>
+
+            <form action="/admin/insumos/guardar" method="post" th:object="${insumo}">
+
+                <input type="hidden" th:field="*{id}">
+
+                <label>Nombre del insumo</label>
+                <input type="text"
+                       th:field="*{nombre}"
+                       placeholder="Ej: Guayaba fresca"
+                       required>
+
+                <label>Cantidad disponible</label>
+                <input type="number"
+                       th:field="*{cantidad}"
+                       placeholder="Ej: 100"
+                       required>
+
+                <label>Unidad de medida</label>
+                <select th:field="*{unidadMedida}" required>
+                    <option value="">Seleccione una unidad</option>
+                    <option value="kg">Kilogramos</option>
+                    <option value="g">Gramos</option>
+                    <option value="litros">Litros</option>
+                    <option value="unidades">Unidades</option>
+                    <option value="cajas">Cajas</option>
+                    <option value="paquetes">Paquetes</option>
+                </select>
+
+                <label>Stock mínimo</label>
+                <input type="number"
+                       th:field="*{stockMinimo}"
+                       placeholder="Ej: 20"
+                       required>
+
+                <label>Proveedor</label>
+                <input type="text"
+                       th:field="*{proveedor}"
+                       placeholder="Ej: Finca El Paraíso">
+
+                <input type="hidden" th:field="*{activo}">
+
+                <button type="submit" class="btn btn-principal">
+                    Guardar insumo
+                </button>
+
+                <a href="/admin/insumos" class="btn btn-secundario btn-full-link">
+                    Limpiar formulario
+                </a>
+            </form>
+        </div>
+
+        <div class="table-panel">
+            <h2>Lista de insumos</h2>
+
+            <div class="tabla-contenedor">
+                <table class="tabla">
+                    <thead>
+                    <tr>
+                        <th>Insumo</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Stock mínimo</th>
+                        <th>Proveedor</th>
+                        <th>Estado</th>
+                        <th>Alerta</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="ins : ${insumos}">
+                        <td>
+                            <strong th:text="${ins.nombre}">Nombre insumo</strong>
+                        </td>
+
+                        <td th:text="${ins.cantidad}">0</td>
+
+                        <td th:text="${ins.unidadMedida}">kg</td>
+
+                        <td th:text="${ins.stockMinimo}">0</td>
+
+                        <td th:text="${ins.proveedor}">Proveedor</td>
+
+                        <td>
+                            <span th:if="${ins.activo}" class="estado-activo">Activo</span>
+                            <span th:unless="${ins.activo}" class="estado-inactivo">Inactivo</span>
+                        </td>
+
+                        <td>
+                            <span th:if="${ins.cantidad <= ins.stockMinimo}" class="estado-inactivo">
+                                Stock bajo
+                            </span>
+
+                            <span th:if="${ins.cantidad > ins.stockMinimo}" class="estado-activo">
+                                Normal
+                            </span>
+                        </td>
+
+                        <td class="acciones">
+                            <a th:href="@{/admin/insumos/editar/{id}(id=${ins.id})}"
+                               class="btn-tabla editar">
+                                Editar
+                            </a>
+
+                            <a th:href="@{/admin/insumos/eliminar/{id}(id=${ins.id})}"
+                               class="btn-tabla eliminar"
+                               onclick="return confirm('¿Seguro que deseas desactivar este insumo?')">
+                                Desactivar
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(insumos)}">
+                        <td colspan="8" class="sin-datos">
+                            No hay insumos registrados todavía.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

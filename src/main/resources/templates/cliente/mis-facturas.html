@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Facturas | Dulce Almíbar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>Mis Facturas</h1>
+
+  <nav>
+    <a href="/cliente/catalogo">Catálogo</a>
+    <a href="/cliente/pedido">Hacer pedido</a>
+    <a href="/cliente/mis-pedidos">Mis pedidos</a>
+    <a href="/cliente/mis-facturas">Mis facturas</a>
+    <a href="/logout">Cerrar sesión</a>
+  </nav>
+</header>
+
+<main class="dashboard">
+
+  <section class="bienvenida">
+    <h2>Facturas generadas</h2>
+    <p>
+      Aquí puedes consultar las facturas generadas por tus pedidos pagados.
+    </p>
+  </section>
+
+  <section class="table-panel">
+
+    <h2>Mis facturas</h2>
+
+    <div class="tabla-contenedor">
+      <table class="tabla">
+        <thead>
+        <tr>
+          <th>Número</th>
+          <th>Pedido</th>
+          <th>Fecha</th>
+          <th>Subtotal</th>
+          <th>IVA</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Ver</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="fac : ${facturas}">
+          <td>
+            <strong th:text="${fac.numeroFactura}">FAC-000</strong>
+          </td>
+
+          <td>
+            #<span th:text="${fac.pedido.id}">1</span>
+          </td>
+
+          <td th:text="${#temporals.format(fac.fechaEmision, 'dd/MM/yyyy HH:mm')}">
+            01/01/2026
+          </td>
+
+          <td>
+            $<span th:text="${#numbers.formatDecimal(fac.subtotal, 0, 'POINT', 0, 'COMMA')}">0</span>
+          </td>
+
+          <td>
+            $<span th:text="${#numbers.formatDecimal(fac.iva, 0, 'POINT', 0, 'COMMA')}">0</span>
+          </td>
+
+          <td>
+            <strong>
+              $<span th:text="${#numbers.formatDecimal(fac.total, 0, 'POINT', 0, 'COMMA')}">0</span>
+            </strong>
+          </td>
+
+          <td>
+            <span class="estado-activo" th:text="${fac.estadoFactura}">GENERADA</span>
+          </td>
+
+          <td>
+            <a th:href="@{/factura/ver/{id}(id=${fac.id})}" class="btn-tabla editar">
+              Ver factura
+            </a>
+          </td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(facturas)}">
+          <td colspan="8" class="sin-datos">
+            Aún no tienes facturas generadas.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>

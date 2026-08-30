@@ -1,438 +1,435 @@
 
-````markdown
 # 🍬 Dulce de Almíbar Web
 
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-brightgreen)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-Templates-green)
+![Maven](https://img.shields.io/badge/Maven-Build-red)
+![Estado](https://img.shields.io/badge/Estado-Proyecto%20académico-yellow)
 
+Sistema web orientado a apoyar la **producción, inventario, comercialización, pedidos, pagos y facturación** de productos de dulce de almíbar.
 
-Sistema web para apoyar la **producción, inventario, comercialización, pedidos, pagos y facturación** de productos de dulce de almíbar.
-
-El proyecto fue desarrollado de forma **individual** como parte de mi formación en Ingeniería de Sistemas y busca integrar en una sola aplicación procesos administrativos y funcionalidades orientadas al cliente.
+Este proyecto fue desarrollado de forma **individual** como parte de mi formación en Ingeniería de Sistemas y busca integrar en una sola aplicación diferentes procesos administrativos y funcionalidades orientadas al cliente.
 
 ---
 
 ## 📌 Descripción del proyecto
 
-**Dulce de Almíbar Web** es una aplicación construida con Java y Spring Boot que permite centralizar diferentes procesos de un emprendimiento dedicado a la producción y venta de productos de dulce de almíbar.
+**Dulce de Almíbar Web** es una aplicación desarrollada con Java y Spring Boot que permite centralizar diferentes procesos de un emprendimiento dedicado a la producción y comercialización de productos de dulce de almíbar.
 
-El sistema cuenta con vistas para clientes y administración, y permite trabajar con información relacionada con:
+El sistema cuenta con funcionalidades tanto para clientes como para administración y permite gestionar información relacionada con:
 
 - Usuarios.
 - Productos.
+- Inventario.
 - Insumos.
 - Proveedores.
 - Pedidos.
 - Detalles de pedidos.
 - Pagos.
 - Facturas.
-- Inventario y disponibilidad de productos.
 
-La información se almacena principalmente en **PostgreSQL** mediante Spring Data JPA e Hibernate. Para demostraciones o pruebas rápidas también puede utilizarse un perfil con **H2 en memoria**.
+La información se almacena principalmente en una base de datos **PostgreSQL**, utilizando Spring Data JPA e Hibernate para la persistencia y gestión de los datos.
+
+Adicionalmente, el proyecto cuenta con un perfil de demostración utilizando **H2 en memoria**, que permite ejecutar la aplicación para realizar pruebas sin necesidad de instalar PostgreSQL.
 
 ---
 
-# 🎯 Objetivo del proyecto
+## 🎯 Objetivo del proyecto
 
-Desarrollar una aplicación web que permita apoyar la gestión de los procesos de producción y comercialización de dulce de almíbar, centralizando la información del negocio y facilitando la administración de productos, insumos, proveedores, pedidos, pagos y facturación.
+Desarrollar una aplicación web que permita apoyar la gestión de los procesos de producción y comercialización de dulce de almíbar, centralizando la información del negocio y facilitando la administración de productos, inventario, insumos, proveedores, pedidos, pagos y facturación.
 
-El sistema busca:
+### Objetivos funcionales
 
 - Facilitar el registro y consulta de productos.
-- Llevar control del stock disponible.
-- Gestionar insumos utilizados dentro del proceso productivo.
+- Gestionar la disponibilidad y el stock.
+- Administrar los insumos utilizados en el proceso productivo.
 - Registrar y consultar proveedores.
 - Permitir el registro de clientes.
 - Gestionar pedidos realizados por los clientes.
 - Registrar pagos asociados a los pedidos.
 - Generar y consultar facturas.
-- Separar las funcionalidades administrativas de las funcionalidades del cliente.
+- Organizar las funcionalidades de acuerdo con el tipo de usuario.
 
 ---
 
-# 👥 Tipos de usuario
+## 👥 Tipos de usuario
 
-El sistema contempla dos roles principales:
+El sistema contempla dos tipos principales de usuario.
 
-| Rol | Funciones principales |
-|---|---|
-| **CLIENTE** | Registro, inicio de sesión, consulta del catálogo, realización de pedidos, registro de pagos y consulta de pedidos y facturas |
-| **ADMIN** | Acceso al panel administrativo y gestión de productos, insumos, proveedores, pedidos y facturas |
+### 👤 Cliente
 
-Los roles están definidos mediante el enum `Rol` y se almacenan dentro de la entidad `Usuario`.
+El cliente puede:
 
----
+- Registrarse en la plataforma.
+- Iniciar sesión.
+- Consultar el catálogo.
+- Visualizar productos disponibles.
+- Realizar pedidos.
+- Registrar pagos.
+- Consultar sus pedidos.
+- Consultar sus facturas.
 
-# ✨ Funcionalidades principales
+### ⚙️ Administrador
 
-## 👤 Registro e inicio de sesión
+El administrador puede acceder al panel administrativo y gestionar:
 
-El sistema permite:
+- Productos.
+- Inventario.
+- Insumos.
+- Proveedores.
+- Pedidos.
+- Facturas.
 
-- Registrar nuevos clientes.
-- Validar que el correo no se encuentre registrado previamente.
-- Iniciar sesión mediante correo y contraseña.
-- Guardar el usuario autenticado en sesión.
-- Redirigir al usuario según su rol.
-- Cerrar sesión.
-
-Flujo general:
-
-```text
-Usuario
-   ↓
-Registro / Inicio de sesión
-   ↓
-Validación
-   ↓
-┌─────────────────┬─────────────────┐
-│      ADMIN      │     CLIENTE     │
-│        ↓        │        ↓        │
-│   Dashboard     │    Catálogo     │
-└─────────────────┴─────────────────┘
-````
+Los tipos de usuario se encuentran asociados a los roles definidos dentro de la aplicación.
 
 ---
 
-## 🍯 Gestión de productos
+## ✨ Funcionalidades principales
+
+### 👤 Registro e inicio de sesión
+
+El sistema permite registrar nuevos clientes y validar que el correo electrónico ingresado no se encuentre previamente registrado.
+
+Los usuarios pueden iniciar sesión utilizando su correo electrónico y contraseña.
+
+Después de validar los datos, el sistema identifica el rol correspondiente y dirige al usuario hacia la sección adecuada.
+
+- Si el usuario tiene rol de **administrador**, accede al panel administrativo.
+- Si el usuario tiene rol de **cliente**, accede a las funcionalidades correspondientes al cliente.
+
+El sistema también permite mantener la sesión durante la navegación y cerrarla cuando el usuario lo desee.
+
+---
+
+### 🍯 Gestión de productos
 
 Desde el módulo administrativo es posible:
 
-* Consultar productos.
-* Registrar nuevos productos.
-* Editar información existente.
-* Eliminar productos.
-* Definir nombre, descripción y categoría.
-* Registrar precio.
-* Controlar stock.
-* Definir si un producto está activo.
-* Asociar un elemento visual mediante emoji.
+- Consultar productos.
+- Registrar nuevos productos.
+- Modificar información de productos existentes.
+- Eliminar productos.
+- Registrar nombre y descripción.
+- Definir categorías.
+- Establecer precios.
+- Controlar el stock.
+- Gestionar la disponibilidad de los productos.
 
 Los clientes pueden visualizar los productos disponibles desde el catálogo.
 
 ---
 
-## 📦 Gestión de insumos
+### 📦 Gestión de inventario e insumos
 
-El sistema permite administrar información relacionada con los insumos utilizados dentro del proceso productivo.
+El sistema permite administrar los insumos utilizados dentro del proceso de producción.
 
-Cada insumo puede contener:
+Para cada insumo se puede almacenar información relacionada con:
 
-* Nombre.
-* Cantidad.
-* Unidad de medida.
-* Stock mínimo.
-* Proveedor.
-* Estado activo/inactivo.
+- Nombre.
+- Cantidad.
+- Unidad de medida.
+- Stock mínimo.
+- Proveedor asociado.
+- Estado.
 
-Desde el panel administrativo se pueden crear, editar, consultar y eliminar registros de insumos.
-
----
-
-## 🚚 Gestión de proveedores
-
-El módulo de proveedores permite almacenar información como:
-
-* Nombre.
-* Contacto.
-* Teléfono.
-* Correo electrónico.
-* Dirección.
-* Tipo de insumo suministrado.
-* Estado del proveedor.
-
-La administración puede registrar, editar y eliminar proveedores.
+Desde el área administrativa es posible consultar, registrar, modificar y eliminar esta información.
 
 ---
 
-## 🛒 Gestión de pedidos
+### 🚚 Gestión de proveedores
 
-Los clientes pueden realizar pedidos seleccionando productos disponibles.
+El módulo de proveedores permite registrar y administrar información relacionada con las personas o empresas encargadas de suministrar los insumos.
 
-Cada pedido almacena información como:
+Entre los datos gestionados se encuentran:
 
-* Nombre del cliente.
-* Correo.
-* Teléfono.
-* Dirección.
-* Observaciones.
-* Total.
-* Estado del pedido.
-* Fecha de creación.
-* Detalle de los productos solicitados.
-
-Los detalles del pedido contienen:
-
-* Producto.
-* Cantidad.
-* Precio unitario.
-* Subtotal.
-
-El administrador puede consultar los pedidos y actualizar su estado.
+- Nombre.
+- Información de contacto.
+- Teléfono.
+- Correo electrónico.
+- Dirección.
+- Tipo de insumo suministrado.
+- Estado del proveedor.
 
 ---
 
-## 💳 Gestión de pagos
+### 🛒 Gestión de pedidos
 
-El sistema incluye un módulo para asociar pagos con pedidos.
+Los clientes pueden realizar pedidos utilizando los productos disponibles en el sistema.
 
-Cada pago puede registrar:
+Cada pedido puede contener información relacionada con:
 
-* Pedido relacionado.
-* Método de pago.
-* Valor pagado.
-* Estado del pago.
-* Referencia.
-* Fecha del pago.
+- Cliente.
+- Correo electrónico.
+- Teléfono.
+- Dirección.
+- Observaciones.
+- Valor total.
+- Estado del pedido.
+- Fecha de creación.
+
+También se registra el detalle de los productos seleccionados, incluyendo:
+
+- Producto.
+- Cantidad.
+- Precio unitario.
+- Subtotal.
+
+El administrador puede consultar los pedidos realizados y gestionar su estado.
 
 ---
 
-## 🧾 Facturación
+### 💳 Gestión de pagos
+
+El sistema permite registrar información relacionada con los pagos de los pedidos.
+
+Cada pago puede incluir:
+
+- Pedido asociado.
+- Método de pago.
+- Valor pagado.
+- Estado del pago.
+- Referencia.
+- Fecha del pago.
+
+---
+
+### 🧾 Facturación
 
 El sistema permite generar y consultar facturas relacionadas con los pedidos.
 
-Una factura almacena:
+Cada factura puede almacenar:
 
-* Número de factura.
-* Pedido asociado.
-* Información del cliente.
-* Subtotal.
-* IVA.
-* Total.
-* Estado de la factura.
-* Fecha de emisión.
+- Número de factura.
+- Pedido asociado.
+- Información del cliente.
+- Subtotal.
+- IVA.
+- Total.
+- Estado.
+- Fecha de emisión.
 
-Los clientes pueden consultar sus facturas y el administrador puede revisar las facturas generadas.
-
----
-
-# 🛠️ Tecnologías utilizadas
-
-| Tecnología             | Uso dentro del proyecto                            |
-| ---------------------- | -------------------------------------------------- |
-| **Java 21**            | Lenguaje principal                                 |
-| **Spring Boot 4.0.6**  | Desarrollo y configuración de la aplicación        |
-| **Spring Web MVC**     | Controladores y navegación web                     |
-| **Spring Data JPA**    | Persistencia y acceso a datos                      |
-| **Hibernate**          | Mapeo objeto-relacional                            |
-| **PostgreSQL**         | Base de datos principal                            |
-| **H2**                 | Base de datos temporal para demostración           |
-| **Thymeleaf**          | Renderizado dinámico de vistas HTML                |
-| **Spring Security**    | Infraestructura de seguridad integrada al proyecto |
-| **Jakarta Validation** | Validación de datos                                |
-| **Lombok**             | Reducción de código repetitivo en entidades        |
-| **HTML**               | Estructura de las interfaces                       |
-| **CSS**                | Diseño visual                                      |
-| **Maven**              | Gestión de dependencias y ejecución                |
-| **Git / GitHub**       | Control de versiones y publicación del proyecto    |
+Los clientes pueden consultar sus facturas y el administrador puede revisar la información asociada a la facturación.
 
 ---
 
-# 🧩 Arquitectura del sistema
+## 🛠️ Tecnologías utilizadas
 
-El proyecto sigue una organización por capas:
-
-```text
-┌───────────────────────────────────┐
-│           VISTAS WEB              │
-│      Thymeleaf + HTML + CSS       │
-└────────────────┬──────────────────┘
-                 │
-                 ↓
-┌───────────────────────────────────┐
-│          CONTROLLERS              │
-│  Reciben solicitudes del usuario │
-└────────────────┬──────────────────┘
-                 │
-                 ↓
-┌───────────────────────────────────┐
-│            SERVICES               │
-│       Lógica de negocio           │
-└────────────────┬──────────────────┘
-                 │
-                 ↓
-┌───────────────────────────────────┐
-│          REPOSITORIES             │
-│       Spring Data JPA             │
-└────────────────┬──────────────────┘
-                 │
-                 ↓
-┌───────────────────────────────────┐
-│          BASE DE DATOS            │
-│      PostgreSQL / H2 demo         │
-└───────────────────────────────────┘
-```
-
-Esta separación facilita el mantenimiento del proyecto y evita concentrar toda la lógica dentro de una sola clase.
+| Tecnología | Uso dentro del proyecto |
+|---|---|
+| **Java 21** | Lenguaje principal de programación |
+| **Spring Boot** | Desarrollo y configuración de la aplicación |
+| **Spring Web MVC** | Gestión de controladores y navegación |
+| **Spring Data JPA** | Persistencia y acceso a datos |
+| **Hibernate** | Mapeo objeto-relacional |
+| **PostgreSQL** | Base de datos principal |
+| **H2** | Base de datos temporal para demostración |
+| **Thymeleaf** | Generación de vistas dinámicas |
+| **Spring Security** | Dependencia relacionada con seguridad |
+| **Jakarta Validation** | Validación de información |
+| **Lombok** | Simplificación de código |
+| **HTML** | Estructura de las interfaces |
+| **CSS** | Diseño y presentación visual |
+| **Maven** | Gestión de dependencias |
+| **Git** | Control de versiones |
+| **GitHub** | Publicación y almacenamiento del proyecto |
 
 ---
 
-# 📂 Estructura del proyecto
+## 🧩 Arquitectura del sistema
 
-```text
-dulce-almibar-web/
-│
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/jdc/dulcealmibar/
-│   │   │       ├── config/
-│   │   │       ├── controller/
-│   │   │       ├── entity/
-│   │   │       ├── repository/
-│   │   │       ├── service/
-│   │   │       └── DulceAlmibarApplication.java
-│   │   │
-│   │   └── resources/
-│   │       ├── static/
-│   │       ├── templates/
-│   │       ├── application.properties
-│   │       └── application-demo.properties
-│   │
-│   └── test/
-│
-├── .gitignore
-├── pom.xml
-├── mvnw
-├── mvnw.cmd
-└── README.md
-```
+El proyecto se encuentra organizado mediante una arquitectura por capas.
 
----
+### Vista
 
-# 🗄️ Modelo de datos
+Las interfaces que utiliza el usuario están desarrolladas principalmente con:
 
-El sistema trabaja con las siguientes entidades principales:
+- Thymeleaf.
+- HTML.
+- CSS.
 
-| Entidad         | Propósito                                 |
-| --------------- | ----------------------------------------- |
-| `Usuario`       | Información de clientes y administradores |
-| `Producto`      | Catálogo, precio y stock                  |
-| `Insumo`        | Insumos utilizados en producción          |
-| `Proveedor`     | Información de proveedores                |
-| `Pedido`        | Información general de una compra         |
-| `DetallePedido` | Productos y cantidades de cada pedido     |
-| `Pago`          | Información del pago de un pedido         |
-| `Factura`       | Facturación asociada a pedidos            |
+### Controller
+
+Los controladores reciben las solicitudes realizadas desde las interfaces y gestionan la navegación entre las diferentes funcionalidades.
+
+### Service
+
+Los servicios contienen la lógica asociada con las operaciones principales del sistema.
+
+### Repository
+
+Los repositorios permiten realizar operaciones de consulta, almacenamiento, actualización y eliminación de información mediante Spring Data JPA.
+
+### Entity
+
+Las entidades representan la información almacenada en la base de datos y las relaciones existentes entre los diferentes elementos del sistema.
+
+### Base de datos
+
+PostgreSQL es utilizado como sistema principal de persistencia de información.
+
+Para pruebas se cuenta además con una configuración alternativa utilizando H2.
 
 ---
 
-# 🔗 Relaciones principales
+## 📂 Estructura general del proyecto
 
-## Pedido → DetallePedido
+La aplicación se encuentra organizada principalmente en las siguientes carpetas:
 
-```text
-PEDIDO
-  │
-  │ 1
-  │
-  └──────────── N
-          DETALLE_PEDIDO
-```
+- `config`: configuración de la aplicación.
+- `controller`: controladores.
+- `entity`: entidades del sistema.
+- `repository`: acceso a datos.
+- `service`: lógica de negocio.
+- `templates`: vistas desarrolladas con Thymeleaf.
+- `static`: archivos estáticos como CSS.
+- `resources`: archivos de configuración.
 
-## Pedido → Pago
+La clase principal del proyecto es:
 
-```text
-PEDIDO ─────── PAGO
-        1 : 1
-```
-
-## Pedido → Factura
-
-```text
-PEDIDO ─────── FACTURA
-        1 : 1
-```
+`DulceAlmibarApplication.java`
 
 ---
 
-# 🔄 Flujo general del sistema
+## 🗄️ Modelo de datos
 
-```text
-Cliente
-   ↓
-Registro / Login
-   ↓
-Catálogo de productos
-   ↓
-Selección de productos
-   ↓
-Creación del pedido
-   ↓
-Detalle del pedido
-   ↓
-Registro del pago
-   ↓
-Generación / consulta de factura
-```
+El sistema trabaja con diferentes entidades relacionadas con los procesos del negocio.
 
-Desde la administración:
+### Usuario
 
-```text
-Administrador
-      ↓
-Dashboard
-      ↓
-┌────────────┬────────────┬──────────────┐
-│ Productos  │  Insumos   │ Proveedores │
-└────────────┴────────────┴──────────────┘
-      ↓
-Pedidos
-      ↓
-Facturas
-```
+Almacena la información relacionada con clientes y administradores.
 
----
+### Producto
 
-# 🌐 Rutas principales
+Representa los productos disponibles para la venta e incluye información relacionada con precios, descripción y stock.
 
-## Rutas públicas y autenticación
+### Insumo
 
-| Método | Ruta        | Descripción                    |
-| ------ | ----------- | ------------------------------ |
-| GET    | `/`         | Página principal               |
-| GET    | `/login`    | Formulario de inicio de sesión |
-| POST   | `/login`    | Procesa el inicio de sesión    |
-| GET    | `/registro` | Formulario de registro         |
-| POST   | `/registro` | Registra un cliente            |
-| GET    | `/logout`   | Cierra la sesión               |
+Representa los elementos utilizados dentro del proceso de producción.
 
-## Rutas de cliente
+### Proveedor
 
-| Método | Ruta                       | Descripción                      |
-| ------ | -------------------------- | -------------------------------- |
-| GET    | `/cliente/inicio`          | Inicio del cliente               |
-| GET    | `/cliente/catalogo`        | Catálogo de productos            |
-| GET    | `/cliente/pedido`          | Formulario de pedido             |
-| POST   | `/cliente/pedido/guardar`  | Guarda un pedido                 |
-| GET    | `/cliente/mis-pedidos`     | Consulta los pedidos del cliente |
-| GET    | `/cliente/pago/{pedidoId}` | Formulario de pago               |
-| POST   | `/cliente/pago/guardar`    | Registra el pago                 |
-| GET    | `/cliente/mis-facturas`    | Consulta facturas                |
+Almacena la información relacionada con los proveedores de insumos.
 
-## Rutas administrativas
+### Pedido
 
-| Método | Ruta                             | Descripción            |
-| ------ | -------------------------------- | ---------------------- |
-| GET    | `/admin/dashboard`               | Panel administrativo   |
-| GET    | `/admin/productos`               | Gestión de productos   |
-| POST   | `/admin/productos/guardar`       | Guarda un producto     |
-| GET    | `/admin/productos/editar/{id}`   | Edita un producto      |
-| GET    | `/admin/productos/eliminar/{id}` | Elimina un producto    |
-| GET    | `/admin/insumos`                 | Gestión de insumos     |
-| POST   | `/admin/insumos/guardar`         | Guarda un insumo       |
-| GET    | `/admin/proveedores`             | Gestión de proveedores |
-| POST   | `/admin/proveedores/guardar`     | Guarda un proveedor    |
-| GET    | `/admin/pedidos`                 | Consulta pedidos       |
-| GET    | `/admin/facturas`                | Consulta facturas      |
+Representa una compra realizada por un cliente.
+
+### DetallePedido
+
+Permite relacionar un pedido con los diferentes productos, cantidades y precios correspondientes.
+
+### Pago
+
+Almacena información relacionada con los pagos asociados a los pedidos.
+
+### Factura
+
+Representa la información correspondiente a la facturación de una compra.
 
 ---
 
-# 💾 Configuración con PostgreSQL
+## 🔗 Relaciones principales
 
-El archivo principal de configuración se encuentra en:
+### Pedido y detalle del pedido
 
-```text
-src/main/resources/application.properties
-```
+Un pedido puede contener diferentes productos, por lo que se relaciona con uno o varios detalles de pedido.
+
+Cada detalle registra información como producto, cantidad, precio unitario y subtotal.
+
+### Pedido y pago
+
+Los pagos se encuentran asociados a los pedidos realizados por los clientes.
+
+### Pedido y factura
+
+Las facturas se generan a partir de la información correspondiente a los pedidos.
+
+---
+
+## 🔄 Flujo general del cliente
+
+El funcionamiento general para un cliente sigue el siguiente proceso:
+
+1. El usuario accede a la aplicación.
+2. Puede registrarse si todavía no posee una cuenta.
+3. Inicia sesión utilizando correo electrónico y contraseña.
+4. Accede al catálogo.
+5. Consulta los productos disponibles.
+6. Selecciona los productos que desea adquirir.
+7. Realiza un pedido.
+8. Registra el pago correspondiente.
+9. Consulta sus pedidos.
+10. Consulta la información relacionada con sus facturas.
+
+---
+
+## ⚙️ Flujo administrativo
+
+El administrador puede ingresar al panel administrativo y acceder a diferentes módulos.
+
+Desde allí puede:
+
+1. Gestionar productos.
+2. Administrar el inventario.
+3. Gestionar insumos.
+4. Administrar proveedores.
+5. Consultar pedidos.
+6. Gestionar el estado de los pedidos.
+7. Consultar información relacionada con las facturas.
+
+---
+
+## 🌐 Rutas principales
+
+### Autenticación
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/` | Página principal |
+| GET | `/login` | Inicio de sesión |
+| POST | `/login` | Procesamiento del inicio de sesión |
+| GET | `/registro` | Formulario de registro |
+| POST | `/registro` | Registro de cliente |
+| GET | `/logout` | Cierre de sesión |
+
+### Cliente
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/cliente/inicio` | Página principal del cliente |
+| GET | `/cliente/catalogo` | Catálogo de productos |
+| GET | `/cliente/pedido` | Formulario de pedido |
+| POST | `/cliente/pedido/guardar` | Registro del pedido |
+| GET | `/cliente/mis-pedidos` | Consulta de pedidos |
+| GET | `/cliente/pago/{pedidoId}` | Formulario de pago |
+| POST | `/cliente/pago/guardar` | Registro del pago |
+| GET | `/cliente/mis-facturas` | Consulta de facturas |
+
+### Administración
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/admin/dashboard` | Panel administrativo |
+| GET | `/admin/productos` | Gestión de productos |
+| POST | `/admin/productos/guardar` | Registro de productos |
+| GET | `/admin/insumos` | Gestión de insumos |
+| POST | `/admin/insumos/guardar` | Registro de insumos |
+| GET | `/admin/proveedores` | Gestión de proveedores |
+| POST | `/admin/proveedores/guardar` | Registro de proveedores |
+| GET | `/admin/pedidos` | Consulta de pedidos |
+| GET | `/admin/facturas` | Consulta de facturas |
+
+---
+
+## 💾 Configuración de PostgreSQL
+
+La configuración principal del proyecto se encuentra en:
+
+`src/main/resources/application.properties`
+
+Se recomienda utilizar variables de entorno para evitar publicar credenciales directamente en GitHub.
 
 Ejemplo:
 
@@ -450,13 +447,17 @@ server.port=8081
 
 ---
 
-# 🐘 Crear la base de datos
+## 🐘 Creación de la base de datos
+
+Crear una base de datos en PostgreSQL:
 
 ```sql
 CREATE DATABASE dulce_almibar;
 ```
 
-Luego configurar:
+Después se deben definir los datos necesarios para realizar la conexión.
+
+Ejemplo:
 
 ```text
 DB_URL=jdbc:postgresql://localhost:5432/dulce_almibar
@@ -464,272 +465,280 @@ DB_USER=postgres
 DB_PASSWORD=TU_CONTRASEÑA
 ```
 
-> ⚠️ No publiques contraseñas reales dentro del repositorio.
+> ⚠️ No se deben publicar contraseñas reales dentro de un repositorio público.
 
 ---
 
-# 📋 Requisitos
+## 📋 Requisitos
 
-* Java JDK 21
-* PostgreSQL
-* Maven o Maven Wrapper
-* Git
-* Navegador web
-* IDE opcional: IntelliJ IDEA, VS Code o Eclipse
+Para ejecutar la aplicación con PostgreSQL se recomienda contar con:
+
+- Git.
+- Java JDK 21.
+- PostgreSQL.
+- Maven o Maven Wrapper.
+- Navegador web.
+
+También puede utilizarse un entorno de desarrollo como:
+
+- IntelliJ IDEA.
+- Visual Studio Code.
+- Eclipse.
+
+El uso de un IDE no es obligatorio para ejecutar la aplicación.
 
 ---
 
-# 📥 Clonar el repositorio
+## 📥 Clonar el proyecto
 
 ```bash
 git clone https://github.com/Carencitha/dulce-almibar-web.git
+```
+
+Ingresar a la carpeta:
+
+```bash
 cd dulce-almibar-web
 ```
 
 ---
 
-# ▶️ Ejecutar con PostgreSQL
+## ▶️ Ejecutar con PostgreSQL
 
-## Windows
+### Windows
+
+Utilizando Maven Wrapper:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-o:
+Si Maven está instalado:
 
 ```powershell
 mvn spring-boot:run
 ```
 
-## Linux / macOS
+### Linux o macOS
 
 ```bash
 chmod +x mvnw
 ./mvnw spring-boot:run
 ```
 
-o:
+También puede utilizarse:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Después abrir:
+Cuando la aplicación esté funcionando, acceder a:
 
-```text
-http://localhost:8081
-```
+`http://localhost:8081`
 
 ---
 
-# 🧪 Modo demo con H2
+## 🧪 Modo demo con H2
 
-El proyecto incluye una configuración alternativa para ejecutarse sin PostgreSQL.
+El proyecto cuenta con una configuración alternativa utilizando una base de datos **H2 en memoria**.
 
-Archivo:
+Este modo permite ejecutar la aplicación sin necesidad de instalar PostgreSQL.
 
-```text
-src/main/resources/application-demo.properties
-```
+La configuración se encuentra en:
 
-Ejecutar con:
+`src/main/resources/application-demo.properties`
+
+Para iniciar el perfil de demostración:
 
 ```bash
 SPRING_PROFILES_ACTIVE=demo mvn spring-boot:run
 ```
 
-Este modo utiliza una base de datos H2 en memoria.
+---
+
+## ⚠️ Funcionamiento de H2
+
+H2 se utiliza únicamente como alternativa para pruebas y demostraciones.
+
+Debido a que trabaja en memoria:
+
+- La base de datos se crea cuando se inicia la aplicación.
+- Los datos almacenados originalmente en PostgreSQL no aparecen automáticamente.
+- Los datos de prueba pueden perderse cuando la aplicación se detiene.
+- No se recomienda utilizar esta configuración como almacenamiento permanente.
 
 ---
 
-# ☁️ GitHub Codespaces
+## ☁️ Ejecución con GitHub Codespaces
 
-También puede ejecutarse directamente desde GitHub Codespaces.
+El proyecto también puede ejecutarse directamente desde el navegador utilizando GitHub Codespaces.
 
-Ruta:
+### Crear el Codespace
 
-```text
-Code
-   ↓
-Codespaces
-   ↓
-Create codespace on main
-```
+Desde el repositorio:
 
-Verificar Java:
+**Code → Codespaces → Create codespace on main**
+
+### Verificar Java
 
 ```bash
 java -version
+```
+
+```bash
 javac -version
 ```
 
-Luego ejecutar:
+El proyecto requiere **Java 21**.
+
+### Ejecutar el proyecto
 
 ```bash
 SPRING_PROFILES_ACTIVE=demo mvn spring-boot:run
 ```
 
-Cuando aparezca:
+Cuando la aplicación se encuentre activa, GitHub Codespaces detectará el puerto `8081`.
 
-```text
-Tomcat started on port 8081
-Started DulceAlmibarApplication
-```
-
-abrir la pestaña **Ports / Puertos** y seleccionar el puerto `8081`.
+Desde la sección **Ports / Puertos** se puede abrir la aplicación directamente en el navegador.
 
 ---
 
-# ⚠️ Funcionamiento de H2
+## 🔐 Consideraciones de seguridad
 
-La base de datos de demostración utiliza memoria temporal.
+Debido a que se trata de un proyecto académico, existen diferentes aspectos de seguridad que pueden fortalecerse antes de utilizar la aplicación en un entorno productivo.
 
-Esto significa que:
+Entre las posibles mejoras se encuentran:
 
-* Se crea al iniciar la aplicación.
-* Los datos originales de PostgreSQL no aparecen automáticamente.
-* Los datos temporales pueden perderse al detener la aplicación.
-* Se utiliza únicamente para demostraciones y pruebas rápidas.
-
----
-
-# 🔐 Consideraciones de seguridad
-
-Al tratarse de un proyecto académico, existen aspectos que pueden fortalecerse:
-
-* Implementar BCrypt para almacenamiento seguro de contraseñas.
-* Mejorar el control de acceso por roles.
-* Fortalecer la configuración de Spring Security.
-* Implementar recuperación segura de contraseña.
-* Utilizar secretos y variables de entorno en producción.
-* Agregar validaciones adicionales.
-* Fortalecer la protección CSRF.
+- Implementar BCrypt para proteger las contraseñas.
+- Fortalecer el control de acceso según los roles.
+- Mejorar la configuración de Spring Security.
+- Implementar recuperación segura de contraseña.
+- Utilizar variables de entorno para información sensible.
+- Agregar validaciones adicionales del lado del servidor.
+- Fortalecer la protección CSRF.
 
 ---
 
-# 📈 Mejoras futuras
+## 📈 Mejoras futuras
 
-* Dashboard de ventas.
-* Reportes de productos más vendidos.
-* Alertas de inventario.
-* Historial de movimientos.
-* Notificaciones.
-* Recuperación de contraseña.
-* Pasarela de pagos.
-* Facturas PDF.
-* Exportación a Excel.
-* Pruebas automatizadas.
-* Diseño responsive.
-* Despliegue en la nube.
-* API REST.
+El proyecto puede continuar evolucionando mediante la implementación de:
 
----
-
-# 🎓 Competencias aplicadas
-
-* Java.
-* Spring Boot.
-* Desarrollo backend.
-* Desarrollo web.
-* PostgreSQL.
-* SQL.
-* Spring Data JPA.
-* Hibernate.
-* HTML.
-* CSS.
-* Thymeleaf.
-* Maven.
-* Arquitectura por capas.
-* Modelado de bases de datos.
-* Git y GitHub.
+- Dashboard con estadísticas de ventas.
+- Reportes de productos más vendidos.
+- Alertas de bajo inventario.
+- Historial de movimientos de inventario.
+- Gestión más detallada del proceso de producción.
+- Notificaciones por correo electrónico.
+- Recuperación de contraseña.
+- Mejoras en roles y permisos.
+- Integración con pasarelas de pago.
+- Generación de facturas en PDF.
+- Exportación de reportes a Excel.
+- Pruebas automatizadas.
+- Diseño adaptable a dispositivos móviles.
+- Despliegue en la nube.
+- Desarrollo de una API REST.
 
 ---
 
-# 👩‍💻 Mi participación
+## 🎓 Competencias aplicadas
+
+El desarrollo de este proyecto permitió aplicar y fortalecer conocimientos relacionados con:
+
+- Java.
+- Spring Boot.
+- Desarrollo de software.
+- Desarrollo backend.
+- Desarrollo web.
+- PostgreSQL.
+- SQL.
+- Spring Data JPA.
+- Hibernate.
+- HTML.
+- CSS.
+- Thymeleaf.
+- Maven.
+- Modelado de bases de datos.
+- Arquitectura por capas.
+- Git.
+- GitHub.
+
+---
+
+## 👩‍💻 Mi participación
 
 Este proyecto fue desarrollado **de manera individual**.
 
-Estuve a cargo de:
+Durante su desarrollo estuve a cargo de:
 
-* Análisis de funcionalidades.
-* Diseño de la estructura del sistema.
-* Desarrollo del backend.
-* Creación de entidades.
-* Creación de repositorios.
-* Implementación de servicios.
-* Desarrollo de controladores.
-* Modelado de la base de datos.
-* Integración con PostgreSQL.
-* Desarrollo de vistas web.
-* Gestión de productos.
-* Gestión de insumos.
-* Gestión de proveedores.
-* Gestión de pedidos.
-* Registro de pagos.
-* Facturación.
-* Pruebas y ajustes funcionales.
-
----
-
-# 📚 Aprendizajes obtenidos
-
-El desarrollo del proyecto permitió comprender de forma práctica la relación entre:
-
-```text
-Interfaz
-   ↓
-Controlador
-   ↓
-Servicio
-   ↓
-Repositorio
-   ↓
-Base de datos
-```
-
-También permitió fortalecer conocimientos en:
-
-* Organización de proyectos de software.
-* Integración frontend/backend.
-* Bases de datos relacionales.
-* Resolución de errores.
-* Arquitectura por capas.
-* Desarrollo de funcionalidades completas.
-* Control de versiones.
+- Análisis de las funcionalidades necesarias.
+- Diseño de la estructura general del sistema.
+- Desarrollo del backend.
+- Creación de entidades.
+- Creación de repositorios.
+- Implementación de servicios.
+- Desarrollo de controladores.
+- Modelado de la base de datos.
+- Integración con PostgreSQL.
+- Desarrollo de interfaces web.
+- Gestión de productos.
+- Gestión de inventario.
+- Gestión de insumos.
+- Gestión de proveedores.
+- Gestión de pedidos.
+- Registro de pagos.
+- Facturación.
+- Pruebas y ajustes funcionales.
 
 ---
 
-# 📌 Estado actual
+## 📚 Aprendizajes obtenidos
+
+El desarrollo de este proyecto me permitió comprender de manera práctica cómo se relacionan los diferentes componentes de una aplicación web.
+
+También me permitió fortalecer conocimientos relacionados con:
+
+- Organización de proyectos de software.
+- Desarrollo backend.
+- Integración entre interfaces y lógica de negocio.
+- Manejo de bases de datos relacionales.
+- Arquitectura por capas.
+- Persistencia de información.
+- Resolución de errores durante el desarrollo.
+- Construcción de funcionalidades completas.
+- Control de versiones.
+- Uso de GitHub para publicación de proyectos.
+
+---
+
+## 📌 Estado del proyecto
 
 🟡 **Proyecto académico funcional en proceso de mejora.**
 
-La versión principal utiliza PostgreSQL y el perfil `demo` permite realizar pruebas rápidas utilizando H2.
+La versión principal utiliza PostgreSQL como base de datos.
+
+Adicionalmente, el proyecto cuenta con un perfil de demostración utilizando H2 para facilitar su ejecución y realización de pruebas.
 
 ---
 
-# 👩‍🎓 Autora
+## 👩‍🎓 Autora
 
 **Caren Garcia**
-Estudiante de Ingeniería de Sistemas
+
+Estudiante de Ingeniería de Sistemas  
 Fundación Universitaria Juan de Castellanos
 
-### Áreas de interés
+### Áreas de interés profesional
 
-* 💻 Desarrollo de software
-* 📊 Análisis de datos
-* 🔐 Ciberseguridad
-* 📋 Liderazgo y gestión de proyectos tecnológicos
+- 💻 Desarrollo de software
+- 📊 Análisis de datos
+- 🔐 Ciberseguridad
+- 📋 Liderazgo y gestión de proyectos tecnológicos
 
 ---
 
-# 📄 Uso
+## 📄 Uso del proyecto
 
 Este repositorio se publica con fines **académicos y de portafolio profesional**.
 
-El código puede utilizarse como referencia educativa respetando la autoría del proyecto.
-
-```
-
-Ese reemplaza completamente el README viejo que pegaste.
-```
+El proyecto representa parte de los conocimientos y competencias adquiridas durante mi formación en Ingeniería de Sistemas.

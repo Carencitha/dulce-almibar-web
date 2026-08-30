@@ -1,14 +1,8 @@
-Sí. Reemplaza **todo** ese README por este:
 
 ````markdown
 # 🍬 Dulce de Almíbar Web
 
-![Java](https://img.shields.io/badge/Java-21-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-brightgreen)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-Templates-green)
-![Maven](https://img.shields.io/badge/Maven-Build-red)
-![Status](https://img.shields.io/badge/Estado-Proyecto%20acad%C3%A9mico-yellow)
+
 
 Sistema web para apoyar la **producción, inventario, comercialización, pedidos, pagos y facturación** de productos de dulce de almíbar.
 
